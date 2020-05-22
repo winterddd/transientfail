@@ -6,7 +6,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
-#include "libcache/cacheutils.h"
+#include "libcache/arm_cacheutils.h"
 
 #define SECRET 'S'
 

