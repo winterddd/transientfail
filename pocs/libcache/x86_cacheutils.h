@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <setjmp.h>
 #include <sched.h>
+#include <x86intrin.h>
 
 static size_t CACHE_MISS = 0;
 static size_t pagesize = 0;
@@ -41,11 +42,10 @@ void flush_shared_memory();
 
 uint64_t rdtsc() {
   uint64_t a, d;
-  asm volatile("mfence");
-  asm volatile("rdtscp" : "=a"(a), "=d"(d) :: "rcx");
-  a = (d << 32) | a;
-  asm volatile("mfence");
-  return a;
+  // asm volatile("mfence");
+  d = __rdtscp(&a);
+  // asm volatile("mfence");
+  return d;
 }
 
 void flush(void *p) { asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax"); }
