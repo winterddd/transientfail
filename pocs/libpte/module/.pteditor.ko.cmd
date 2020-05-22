@@ -1,0 +1,1 @@
+cmd_/home/qpf/transientfail/pocs/libpte/module/pteditor.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/qpf/transientfail/pocs/libpte/module/pteditor.ko /home/qpf/transientfail/pocs/libpte/module/pteditor.o /home/qpf/transientfail/pocs/libpte/module/pteditor.mod.o;  true
