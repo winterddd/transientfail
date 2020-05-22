@@ -41,7 +41,8 @@ void cache_decode_pretty(char *leaked, int index);
 void flush_shared_memory();
 
 uint64_t rdtsc() {
-  uint64_t a, d;
+  uint32_t a;
+  uint64_t d;
   // asm volatile("mfence");
   d = __rdtscp(&a);
   // asm volatile("mfence");
